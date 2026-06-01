@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+# Maintainer: Ren Ellyhcnium <centipede@internet.ru>
+
+# base launch
+
 LOG_FILE=/var/log/samba-launcher.log
 
 set -euo pipefail
@@ -51,4 +55,47 @@ elif [[ $TARGET_DISTRO = alpine ]]; then
 	}
 fi
 
-echo "[ II ] Success!"
+echo "[ II ] smbd successfuly launched"
+
+# firewall
+
+IPTABLES_SAVE_FILE=/etc/iptables.rules
+
+if command -v iptables >/dev/null 2>&1; then
+	if iptables -L INPUT -n | grep -q ACCEPT; then
+		echo "[ II ] iptables was detected as firewall"
+		for proto in "tcp" "udp"; do
+			for port in "137" "138" "139"; do
+				if iptables -C INPUT -p $proto --dport $port -j ACCEPT >/dev/null 2>&1; then
+					echo "[ II ] rule for $proto:$port exist"
+				else
+					echo "[ II ] adding rule for $proto:$port"
+					iptables -I INPUT -p $proto --dport $port -m comment --comment "samba" -j ACCEPT
+				fi
+			done
+		done
+		if iptables -C INPUT -p tcp --dport 445 -j ACCEPT >/dev/null 2>&1; then
+			echo '[ II ] rule for tcp:445 exist'
+		else
+			echo '[ II ] adding rule for tcp:445'
+			iptables -I INPUT -p tcp --dport 445 -m comment --comment "samba" -j ACCEPT
+		fi
+
+	else
+		echo "[ II ] iptables exists, but inactive, skipped"
+ 	fi
+fi
+if command -v ufw >/dev/null 2>&1; then
+	if ufw status verbose | grep -qi inactive; then
+		echo '[ II ] ufw exists, but inactive, skipped'
+	else
+		echo '[ II ] ufw was detected as firewall'
+	fi		
+fi
+if command -v firewall-cmd >/dev/null 2>&1; then
+	if systemctl is-active --quiet firewalld; then
+		echo '[ II ] firewalld was detected as firewall'
+	else
+		echo '[ II ] firewalld exists, but inactive, skipped'
+	fi
+fi
