@@ -1,0 +1,54 @@
+#!/usr/bin/bash
+
+LOG_FILE=/var/log/samba-launcher.log
+
+set -euo pipefail
+mkdir -p /var/log
+touch $LOG_FILE
+chown root:root "$LOG_FILE"
+chmod 640 "$LOG_FILE"
+exec >> $LOG_FILE 2>&1
+
+is_root(){
+	[ "$(id -u)" -eq 0 ]
+}
+
+if ! is_root; then
+	echo "[ EE ] UUID is not 0, launch script from root"
+	exit 1
+fi
+
+if command -v dnf >/dev/null 2>&1; then
+	TARGET_DISTRO=rh
+elif command -v apk >/dev/null 2>&1; then
+	TARGET_DISTRO=alpine
+else
+	echo "[ EE ] Unknown package manager, not supported distro"
+	exit 1
+fi
+
+if [[ $TARGET_DISTRO = rh ]]; then
+	dnf -y upgrade
+	if ! command -v smbd >/dev/null 2>&1; then
+		dnf -y install samba
+	fi
+
+	systemctl enable --now smb --no-block || {
+		echo "[ EE ] Unable to launch smbd"
+		exit 1
+}
+elif [[ $TARGET_DISTRO = alpine ]]; then
+	apk update
+	apk upgrade
+	if ! command -v smbd >/dev/null 2>&1; then
+		apk add samba
+	fi
+
+	rc-update add samba default
+	rc-service samba start || {
+		echo "[ EE ] Unable to launch smbd"
+		exit 1
+	}
+fi
+
+echo "[ II ] Success!"
