@@ -4,6 +4,6 @@ This repo is a script to virtualize and set up classic SMB protocol reailzation 
 
 # Maintainers
 
-System engineer:    Ren Ellychnium <centipede@internet.ru>
-Security engineer:  Ren Ellychnium
-Builder:            Egor Petrikeev
+- System engineer:    Ren Ellychnium <centipede@internet.ru>
+- Security engineer:  Ren Ellychnium
+- Builder:            XVIIITriangle
