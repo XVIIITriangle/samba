@@ -1,0 +1,11 @@
+version: '2'
+services:
+  samba:
+    build: .
+    container_name: samba
+    image: xviiitriangle/samba
+    ports:
+      - "445:445"
+    volumes:
+      - ../../config/smb.conf:/etc/samba/smb.conf:ro
+
