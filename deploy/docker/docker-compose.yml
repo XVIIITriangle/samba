@@ -1,11 +1,19 @@
-version: '2'
+version: "3.8"
+
 services:
   samba:
     build: .
-    container_name: samba
-    image: xviiitriangle/samba
+    container_name: samba-alpine
     ports:
       - "445:445"
+    environment:
+      - SAMBA_USER=username
+      - SAMBA_PASSWORD=YourPassw0rd
+      - SAMBA_GROUP=groupname
+      - SAMBA_UID=1000
+      - SAMBA_GID=1000
     volumes:
-      - ../../config/smb.conf:/etc/samba/smb.conf:ro
+      - ./data/samba:/srv/samba
+      - ./smb.conf:/etc/samba/smb.conf:ro
+    restart: unless-stopped
 
