@@ -8,8 +8,8 @@ RUN mkdir -p /srv/samba/public /srv/samba/private && \
     addgroup -S samba && \
     mkdir -p /run/samba
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY smb.conf /etc/samba/smb.conf
+COPY deploy/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY config/smb.conf /etc/samba/smb.conf
 
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
