@@ -16,6 +16,7 @@ if ! getent passwd "${SAMBA_USER}" >/dev/null 2>&1; then
     adduser -S -G "${SAMBA_GROUP}" "${SAMBA_USER}"
 fi
 
+mkdir -p /etc/samba
 mkdir -p /srv/samba/public
 mkdir -p /srv/samba/private/"${SAMBA_GROUP}"
 mkdir -p /srv/samba/private/"${SAMBA_USER}"

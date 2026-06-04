@@ -15,7 +15,7 @@ services:
       - SAMBA_UID=1000
       - SAMBA_GID=1000
     volumes:
-      - ./data/samba:/srv/samba
-      - ./smb.conf:/etc/samba/smb.conf:ro
+      - ./data:/srv/samba
+      - ./config:/etc/samba:ro
     restart: unless-stopped
 

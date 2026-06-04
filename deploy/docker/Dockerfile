@@ -18,5 +18,5 @@ EXPOSE 445/tcp
 VOLUME ["/srv/samba"]
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["smbd","-FS","--no-process-group"]
+CMD ["smbd","-F","--no-process-group"]
 
