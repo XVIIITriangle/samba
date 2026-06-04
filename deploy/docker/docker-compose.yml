@@ -9,11 +9,11 @@ services:
     ports:
       - "445:445"
     environment:
-      - SAMBA_USER=username
-      - SAMBA_PASSWORD=YourPassw0rd
-      - SAMBA_GROUP=groupname
-      - SAMBA_UID=1000
-      - SAMBA_GID=1000
+      - SAMBA_USER=${SAMBA_USER}
+      - SAMBA_PASSWORD=${SAMBA_PASSWORD}
+      - SAMBA_GROUP=${SAMBA_GROUP}
+      - SAMBA_UID=${SAMBA_UID}
+      - SAMBA_GID=${SAMBA_GID}
     volumes:
       - ./data:/srv/samba
       - ./config:/etc/samba:ro
