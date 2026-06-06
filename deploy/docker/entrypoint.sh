@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-: "${SAMBA_USER:=username}"
-: "${SAMBA_PASSWORD:=password}"
-: "${SAMBA_GROUP:=groupname}"
-: "${SAMBA_UID:=1000}"
-: "${SAMBA_GID:=1000}"
+#: "${SAMBA_USER:=username}"
+#: "${SAMBA_PASSWORD:=password}"
+#: "${SAMBA_GROUP:=groupname}"
+#: "${SAMBA_UID:=1000}"
+#`: "${SAMBA_GID:=1000}"
 
 if ! getent group "${SAMBA_GROUP}" >/dev/null 2>&1; then
   addgroup -g "${SAMBA_GID}" -S "${SAMBA_GROUP}" || addgroup -S "${SAMBA_GROUP}"
